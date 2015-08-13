@@ -253,7 +253,7 @@ CONTAINER ID        IMAGE               COMMAND                CREATED          
 以下で取得できる．個人のページを見ることもできる．
 
 * [Docker Hub](https://hub.docker.com/)
-* [Docker Hub](https://hub.docker.com/u/kakakakakku/)
+* [Docker Hub - kakakakakku](https://hub.docker.com/u/kakakakakku/)
 
 ### 4-2. Docker Hub に push する
 
@@ -267,21 +267,41 @@ kakakakakku/httpd          latest              0507c25b6917        7 minutes ago
 
 `docker push` で Docker Hub に登録することができる．
 
-初回はアカウント情報を対話的に求められるが，2回目以降は `~/.docker/config.json` にファイルがあるため求められなくなる．
+初回に `docker login` で認証をすると `~/.docker/config.json` にファイルが生成される．
 
 ```sh
+➜  my_docker  docker login
 ➜  my_docker  docker push kakakakakku/httpd
-
-Please login prior to push:
-Username:
-Password:
-Email:
-Login Succeeded
 （中略）
 Digest: sha256:6f4444069187b4e10d5b11694b86fd6badc035f8cb3dc7b16e85566d710c65db
 ```
 
 自分の Docker Hub ページを見て正常に push できていることを確認する．
+
+## 5. Docker Compose で複数コンテナを扱う
+
+### 5-1. サンプルの dockerfiles を取得する
+
+* [Kakakakakku/dockerfiles](https://github.com/Kakakakakku/dockerfiles)
+
+```sh
+git clone git@github.com:Kakakakakku/dockerfiles.git
+```
+
+### 5-2. Docker Compose をインストールする
+
+以下のマニュアルに書いてある `curl` でインストールする．
+
+* [Docker Compose](https://docs.docker.com/compose/install/)
+
+### 5-3. Docker Compose で Python アプリコンテナと Redis コンテナを同時に起動する
+
+```sh
+➜  dockerfiles git:(master) cd compose_hits_app
+➜  compose_hits_app git:(master) docker-compose up
+```
+
+この状態で `http://192.168.59.103:5000/` にアクセスすると，Redis でアクセスカウンターアプリを起動させることができる．
 
 # まとめ
 
