@@ -43,8 +43,9 @@ Git commit: 8fdc6f5
 Docker で使う環境変数を設定した状態で起動する．
 
 ```sh
-➜  ~  eval "$(boot2docker shellinit)"
+➜  ~  boot2docker init
 ➜  ~  boot2docker up
+➜  ~  eval "$(boot2docker shellinit)"
 ```
 
 以下のコマンドが返ってきたら正常に起動している．
