@@ -19,7 +19,7 @@ Docker の基礎を実際に手を動かしながら理解する．
 * Docker のコマンドの意味を理解して叩けること
 * 手動でコンテナを構築しイメージを作れること
 * Dockerfile を使ってイメージを作れること
-* Docker Hub に自分用のイメージを公開できること
+* Docker Hub にイメージを公開できること
 
 ## 1. 環境準備
 
@@ -232,4 +232,56 @@ kakakakakku/httpd          latest              0507c25b6917        20 seconds ag
 8096ff4df716407d554896b4590644530ec29e0e7225f5126001578ffc9f3547
 ```
 
-この時点で既に `http://192.168.59.103:8080` にアクセスできることがわかる．
+この状態で既に `http://192.168.59.103:8080` にアクセスできるようになっている．
+
+先ほどと同様にコンテナを外から停止する．
+
+```sh
+➜  my_docker  docker ps
+CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS                  NAMES
+8096ff4df716        kakakakakku/httpd   "/usr/sbin/httpd -D    2 minutes ago       Up 2 minutes        0.0.0.0:8080->80/tcp   furious_torvalds
+
+➜  my_docker  docker stop 8096ff4df716
+8096ff4df716
+```
+
+## 4. Docker Hub にイメージを公開する
+
+### 4-1. Docker Hub のアカウントを取得する
+
+以下で取得できる．個人のページを見ることもできる．
+
+* [Docker Hub](https://hub.docker.com/)
+* [Docker Hub](https://hub.docker.com/u/kakakakakku/)
+
+### 4-2. Docker Hub に push する
+
+対象のイメージを確認しておく．
+
+```sh
+➜  my_docker  docker images
+REPOSITORY                 TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+kakakakakku/httpd          latest              0507c25b6917        7 minutes ago       257.5 MB
+```
+
+`docker push` で Docker Hub に登録することができる．
+
+初回はアカウント情報を対話的に求められるが，2回目以降は `~/.docker/config.json` にファイルがあるため求められなくなる．
+
+```sh
+➜  my_docker  docker push kakakakakku/httpd
+
+Please login prior to push:
+Username:
+Password:
+Email:
+Login Succeeded
+（中略）
+Digest: sha256:6f4444069187b4e10d5b11694b86fd6badc035f8cb3dc7b16e85566d710c65db
+```
+
+自分の Docker Hub ページを見て正常に push できていることを確認する．
+
+# まとめ
+
+Docker 超入門お疲れさまでした！
