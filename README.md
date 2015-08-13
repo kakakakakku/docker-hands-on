@@ -17,11 +17,13 @@ Docker の基礎を実際に手を動かしながら理解する．
 2時間で試せる範囲という意味で今回のゴールを以下のように定める．
 
 * Docker のコマンドの意味を理解して叩けること
-* 手動で構築を構築して自分用のイメージにできること
+* 手動でコンテナを構築しイメージを作れること
 * Dockerfile を使ってイメージを作れること
 * Docker Hub に自分用のイメージを公開できること
 
-## boot2docker on Mac
+## 1. 環境準備
+
+### 1-1. boot2docker on Mac
 
 まず Mac に boot2docker をインストールする．バージョンは `v1.7.1` にする．
 
@@ -36,7 +38,7 @@ Boot2Docker-cli version: v1.7.1
 Git commit: 8fdc6f5
 ```
 
-## boot2docker を起動する
+### 1-2. boot2docker を起動する
 
 Docker で使う環境変数を設定した状態で起動する．
 
@@ -51,7 +53,9 @@ Docker で使う環境変数を設定した状態で起動する．
 ➜  ~  docker info
 ```
 
-## CentOS の Docker イメージを取得する
+## 2. 手動でコンテナを構築する
+
+### 2-1. CentOS の Docker イメージを取得する
 
 `docker images` で結果が表示されたら正常に取得できている．
 
@@ -63,7 +67,7 @@ REPOSITORY           TAG                 IMAGE ID            CREATED            
 centos               centos6             a005304e4e74        7 weeks ago         203.1 MB
 ```
 
-## コンテナを起動して httpd をインストールする
+### 2-2. コンテナを起動して httpd をインストールする
 
 コンテナ内のオペレーションは PS1 が `[]` になっている．
 
@@ -93,7 +97,7 @@ CONTAINER ID        IMAGE                COMMAND                CREATED         
 c0a5325eebaf        centos:centos6       "/bin/bash"            7 minutes ago       Up 7 minutes                                   goofy_bohr
 ```
 
-## コンテナを停止する
+### 2-3. コンテナを停止する
 
 コンテナを停止する．
 
@@ -117,7 +121,7 @@ CONTAINER ID        IMAGE                COMMAND                CREATED         
 c0a5325eebaf        centos:centos6       "/bin/bash"            10 minutes ago      Exited (0) About a minute ago                       goofy_bohr
 ```
 
-## httpd コンテナをイメージにする
+### 2-4. httpd コンテナをイメージにする
 
 イメージ名は任意で OK だけど `${USERNAME}/${IMAGENAME}` にする慣習に沿う．
 
@@ -131,7 +135,7 @@ kakakakakku/manual-httpd   latest              4021b02c4720        13 seconds ag
 centos                     centos6             a005304e4e74        7 weeks ago         203.1 MB
 ```
 
-## httpd イメージを Mac にポートマッピングをした状態で起動する
+### 2-5. httpd イメージを Mac にポートマッピングをした状態で起動する
 
 Mac の 8080 ポートを Docker コンテナの 80 ポートにマッピングした状態で，既に作った httpd イメージを起動する．
 
@@ -151,7 +155,7 @@ Mac の 8080 ポートを Docker コンテナの 80 ポートにマッピング�
 
 Chrome などのブラウザで `http://192.168.59.103:8080` にアクセスして接続できることを確認する．
 
-## コンテナの生存期間を体験する
+### 2-6. コンテナの生存期間を体験する
 
 コンテナ上で `Control + p, Control + q` と入力するとターミナルからデタッチすることができる．
 
@@ -175,3 +179,57 @@ CONTAINER ID        IMAGE                      COMMAND             CREATED      
 するとコンテナが停止するため，アクセスできなくなる．
 
 この一連の流れで，コンテナの生存期間を体験することができたと思う．
+
+## 3. Dockerfile を使ってイメージを作る
+
+僕が作ってる Dockerfile は以下のリポジトリにまとめている．
+
+* [Kakakakakku/dockerfiles](https://github.com/Kakakakakku/dockerfiles)
+
+### 3-1. httpd コンテナを構築する Dockerfile を作成する
+
+`my_docker` のように任意のディレクトリを作成して `Dockerfile` を作成する．
+
+```sh
+➜  my_docker  vim Dockerfile
+```
+
+各項目の詳細はリファレンスに書いてある．
+
+* [Dockerfile reference](https://docs.docker.com/reference/builder/)
+
+```
+FROM centos:centos6
+MAINTAINER Yoshiaki Yoshida <y.yoshida22@gmail.com>
+
+RUN yum install -y httpd
+EXPOSE 80
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+```
+
+### 3-2. Dockerfile からイメージを構築する
+
+```sh
+➜  my_docker  docker build -t kakakakakku/httpd .
+（中略）
+Successfully built 0507c25b6917
+```
+
+正常にビルドが完了するとイメージが構築されていることがわかる．
+
+```sh
+➜  my_docker  docker images
+REPOSITORY                 TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+kakakakakku/httpd          latest              0507c25b6917        20 seconds ago      257.5 MB
+```
+
+### 3-3. 構築したイメージを起動する
+
+今回はバックグラウンド起動を意味した `-d` をオプションで起動する．
+
+```sh
+➜  my_docker  docker run -p 8080:80 -d kakakakakku/httpd
+8096ff4df716407d554896b4590644530ec29e0e7225f5126001578ffc9f3547
+```
+
+この時点で既に `http://192.168.59.103:8080` にアクセスできることがわかる．
