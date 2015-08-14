@@ -306,3 +306,13 @@ git clone git@github.com:Kakakakakku/dockerfiles.git
 # まとめ
 
 Docker 超入門お疲れさまでした！
+
+# Tips
+
+## コマンド補完
+
+`.zshrc` にプラグイン指定をしておくとコマンド補完が使えて便利．
+
+```
+plugins=(docker boot2docker docker-compose)
+```
