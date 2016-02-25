@@ -23,19 +23,17 @@ Docker の基礎を実際に手を動かしながら理解する．
 
 ## 1. 環境準備
 
-### 1-1. boot2docker on Mac
+### 1-1. Docker Toolbox
 
-まず Mac に boot2docker をインストールする．バージョンは `v1.7.1` にする．
+まず Docker Toolbox をインストールする．バージョンは `v0.6.0` にする（最新）．
 
-インストール後に `boot2docker version` が叩けるようになっていれば OK と言える．
+インストール後に `docker-machine version` が叩けるようになっていれば OK と言える．
 
-* [Boot2docker by boot2docker](http://boot2docker.io/)
-* [boot2docker/osx-installer](https://github.com/boot2docker/osx-installer)
+* [Docker Toolbox | Docker](https://www.docker.com/products/docker-toolbox)
 
 ```sh
-➜  ~  boot2docker version
-Boot2Docker-cli version: v1.7.1
-Git commit: 8fdc6f5
+➜  ~ docker-machine version
+docker-machine version 0.6.0, build e27fb87
 ```
 
 ### 1-2. boot2docker を起動する
@@ -43,9 +41,8 @@ Git commit: 8fdc6f5
 Docker で使う環境変数を設定した状態で起動する．
 
 ```sh
-➜  ~  boot2docker init
-➜  ~  boot2docker up
-➜  ~  eval "$(boot2docker shellinit)"
+➜  ~ docker-machine start default
+➜  ~ eval "$(docker-machine env default)"
 ```
 
 以下のコマンドが返ってきたら正常に起動している．
@@ -126,6 +123,8 @@ c0a5325eebaf        centos:centos6       "/bin/bash"            10 minutes ago  
 
 イメージ名は任意で OK だけど `${USERNAME}/${IMAGENAME}` にする慣習に沿う．
 
+`CONTAINER ID` は `docker ps -a` で表示されたものを指定する．
+
 ```sh
 ➜  ~  docker commit c0a5325eebaf kakakakakku/manual-httpd
 4021b02c4720fc422d14ca7477121586d006dbc5f48faa0e74c607f5f01d09b5
@@ -150,7 +149,7 @@ Mac の 8080 ポートを Docker コンテナの 80 ポートにマッピング�
 別のターミナルを開いて Docker が起動してる IP を確認しておく．
 
 ```sh
-➜  ~  boot2docker ip
+➜  ~ docker-machine ip
 192.168.59.103
 ```
 
@@ -314,5 +313,5 @@ Docker 超入門お疲れさまでした！
 `.zshrc` にプラグイン指定をしておくとコマンド補完が使えて便利．
 
 ```
-plugins=(docker boot2docker docker-compose)
+plugins=(docker docker-compose)
 ```
