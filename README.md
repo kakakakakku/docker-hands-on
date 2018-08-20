@@ -2,13 +2,11 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/kakakakakku/docker-hands-on.svg?style=for-the-badge)](https://github.com/kakakakakku/docker-hands-on/stargazers)
 
-## キッカケ
+## 前提
 
-プロダクト内の勉強会で Docker の話をしたら「試してみたい！」というメンバーが多かった．
+Docker ハンズオン資料は以下の環境を前提に動作確認をしています．
 
-教えられるほど詳しくないけど，Docker の基礎の部分をハンズオン形式でやったら面白そうってことで教材を雑に書いている．
-
-* [Docker Tシャツを着て Docker の話をした - kakakakakku blog](http://kakakakakku.hatenablog.com/entry/2015/08/08/000149)
+- [Docker Community Edition for Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac)
 
 ## 目的
 
