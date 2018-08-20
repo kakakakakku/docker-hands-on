@@ -56,6 +56,40 @@ REPOSITORY                            TAG                 IMAGE ID            CR
 hello-world                           latest              2cb0d9787c4d        5 weeks ago         1.85kB
 ```
 
+## `nginx` コンテナを実行する
+
+もう少し実践的なコンテナを実行してみましょう．次は nginx 公式の `nginx` イメージを使います．
+
+- [library/nginx - Docker Hub](https://hub.docker.com/r/library/nginx/)
+
+少しオプションが増えました．`-d` はコンテナプロセスをバックグラウンド実行する場合に指定します．`-p` はコンテナ内部のポートに接続する場合に指定します．今回は動作環境の `8888` ポートをコンテナ内部の `80` ポートに接続しています．
+
+```sh
+$ docker run -d -p 8888:80 nginx
+
+Unable to find image 'nginx:latest' locally
+latest: Pulling from library/nginx
+be8881be8156: Pull complete
+32d9726baeef: Pull complete
+87e5e6f71297: Pull complete
+（中略）
+```
+
+さっそく `http://localhost:8888/` に接続してみましょう．すると nginx に接続できます．
+
+![](images/nginx.png)
+
+次に `docker container ls` と実行します．`docker container ls` は実行中のコンテナを一覧するコマンドです．続けて `docker container kill` と実行し，コンテナを停止します．すると nginx に接続できなくなります．
+
+```sh
+$ docker container ls
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
+3185885edcfb        nginx               "nginx -g 'daemon of…"   8 minutes ago       Up 8 minutes        0.0.0.0:8888->80/tcp   relaxed_shaw
+
+$ docker container kill 3185885edcfb
+3185885edcfb
+```
+
 ## 2. 手動でコンテナを構築する
 
 ### 2-1. CentOS の Docker イメージを取得する
