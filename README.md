@@ -1,5 +1,7 @@
 # docker-hands-on
 
+[![GitHub stars](https://img.shields.io/github/stars/kakakakakku/docker-hands-on.svg?style=for-the-badge)](https://github.com/kakakakakku/docker-hands-on/stargazers)
+
 ## キッカケ
 
 プロダクト内の勉強会で Docker の話をしたら「試してみたい！」というメンバーが多かった．
