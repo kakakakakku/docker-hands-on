@@ -8,47 +8,22 @@ Docker ハンズオン資料は以下の環境を前提に動作確認をして�
 
 - [Docker Community Edition for Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac)
 
-## 目的
+## 環境準備
 
-Docker の基礎を実際に手を動かしながら理解する．
+Docker Community Edition をインストールします．バージョンは最新にします．
 
-## ゴール
+![](images/docker_ce.png)
 
-2時間で試せる範囲という意味で今回のゴールを以下のように定める．
-
-* Docker のコマンドの意味を理解して叩けること
-* 手動でコンテナを構築しイメージを作れること
-* Dockerfile を使ってイメージを作れること
-* Docker Hub にイメージを公開できること
-
-## 1. 環境準備
-
-### 1-1. Docker Toolbox
-
-まず Docker Toolbox をインストールする．バージョンは `v0.6.0` にする（最新）．
-
-インストール後に `docker-machine version` が叩けるようになっていれば OK と言える．
-
-* [Docker Toolbox | Docker](https://www.docker.com/products/docker-toolbox)
+インストール後に `docker` コマンドを実行できるようになっていれば，正常にインストールできています．
 
 ```sh
-➜  ~ docker-machine version
-docker-machine version 0.6.0, build e27fb87
-```
+$ which docker
+/usr/local/bin/docker
 
-### 1-2. boot2docker を起動する
+$ docker -v
+Docker version 18.06.0-ce, build 0ffa825
 
-Docker で使う環境変数を設定した状態で起動する．
-
-```sh
-➜  ~ docker-machine start default
-➜  ~ eval "$(docker-machine env default)"
-```
-
-以下のコマンドが返ってきたら正常に起動している．
-
-```sh
-➜  ~  docker info
+$ docker info
 ```
 
 ## 2. 手動でコンテナを構築する
