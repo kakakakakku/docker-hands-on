@@ -26,6 +26,36 @@ Docker version 18.06.0-ce, build 0ffa825
 $ docker info
 ```
 
+## `hello-world` コンテナを実行する
+
+Docker Community Edition の動作確認も兼ねて，さっそくコンテナを実行してみましょう．今回は Docker から公式に提供されている `hello-world` イメージを使います．
+
+- [library/hello-world - Docker Hub](https://hub.docker.com/_/hello-world/)
+
+以下のように `docker run hello-world` と実行します．`docker run` は指定したイメージを実行するコマンドです．`Hello from Docker!` と表示されていれば，正常に実行できています．
+
+```sh
+$ docker run hello-world
+
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+9db2ca6ccae0: Pull complete
+（中略）
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+（中略）
+```
+
+次に `docker imeges` と実行します．ダウンロードしたイメージを確認することができます．今回使った `hello-world` イメージはたった `1.85kB` と非常に軽量です．
+
+```sh
+$ docker image ls
+REPOSITORY                            TAG                 IMAGE ID            CREATED             SIZE
+hello-world                           latest              2cb0d9787c4d        5 weeks ago         1.85kB
+```
+
 ## 2. 手動でコンテナを構築する
 
 ### 2-1. CentOS の Docker イメージを取得する
