@@ -90,6 +90,48 @@ $ docker container kill 3185885edcfb
 3185885edcfb
 ```
 
+## `nginx` コンテナをカスタマイズする
+
+次に `nginx` イメージをベースにカスタマイズをしてみましょう．具体的には任意の `index.html` を追加したイメージを作成します．
+
+まず，任意のディレクトリに kakakakakku/docker-hands-on リポジトリをクローンしましょう．事前に `dockerfiles/nginx` ディレクトリに `Dockerfile` と `index.html` を用意しています．`Dockerfile` はイメージの構築手順を記述したファイルです．`index.html` は今回 nginx に読み込ませるファイルです．
+
+```sh
+$ git clone https://github.com/kakakakakku/docker-hands-on.git
+$ cd docker-hands-on
+$ ls -l dockerfiles/nginx
+```
+
+`Dockerfile` は非常にシンプルです．先ほど動作確認をした `nginx` イメージをベースに `index.html` をコンテナ内部の `/usr/share/nginx/html/index.html` に配置しています．`COPY` はローカルからコンテナ内部にファイルをコピーするときに使います．
+
+```
+FROM nginx
+
+COPY ./index.html /usr/share/nginx/html/index.html
+```
+
+さっそくイメージをビルドしてみましょう．以下のように `docker build` コマンドを実行します．今回は `docker-hands-on-nginx` というコンテナ名にしましょう．すぐにイメージが作成できます．
+
+```sh
+$ docker build -t docker-hands-on-nginx dockerfiles/nginx/
+（中略）
+Successfully tagged docker-hands-on-nginx:latest
+
+$ docker image ls
+REPOSITORY                            TAG                 IMAGE ID            CREATED             SIZE
+docker-hands-on-nginx                 latest              e5c40748c226        27 hours ago        109MB
+```
+
+カスタマイズしたイメージをすぐに実行できます．先ほどと同じ `docker run` コマンドを実行しましょう．
+
+```sh
+$ docker run -d -p 8888:80 docker-hands-on-nginx
+```
+
+改めて `http://localhost:8888/` に接続すると，カスタマイズした `index.html` を確認できます．
+
+![](images/nginx_custom.png)
+
 ## 2. 手動でコンテナを構築する
 
 ### 2-1. CentOS の Docker イメージを取得する
