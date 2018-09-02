@@ -165,3 +165,57 @@ $ docker push ${DOCKER_HUB_ACCOUNT}/docker-hands-on-nginx
 自分の Docker Hub を確認すると，以下のように正常にイメージが公開できています．
 
 ![](images/docker_hub.png)
+
+## Docker Compose で複数コンテナを実行する
+
+Docker Compose を使うと，複数コンテナを実行することができます．Docker Compose の設定ファイルは `dockerfiles/composetest/docker-compose.yml` です．以下のような構成になり，`services` 直下を見ると `web` コンテナと `redis` コンテナを実行していることがわかります．
+
+```yaml
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+     - "5000:5000"
+  redis:
+    image: "redis:alpine"
+```
+
+さっそく実行してみましょう．Docker Composer では `docker-compose up` コマンドを実行します．
+
+```sh
+$ docker-compose -f dockerfiles/composetest/docker-compose.yml up -d
+Starting composetest_redis_1 ... done
+Starting composetest_web_1   ... done
+```
+
+そして `http://0.0.0.0:5000/` に接続してみましょう．ブラウザをリロードすると，アクセス回数をカウントするアプリケーションを簡単に実行することができました．
+
+![](images/composetest.png)
+
+アクセス回数のデータはどこに保存されているのでしょう？実行中の `redis` コンテナに接続してみましょう．
+
+まず `docker ps` コマンドで実行中のコンテナ一覧を確認します（`CONTAINER ID` は異なります）．次に `docker exec` コマンドで `redis` コンテナに接続をします．コンテナ内部で Redis に接続し，保存されている `hits` キーの値を確認することができます．このように `docker exec` コマンドを使うとコンテナに接続することができます．
+
+```sh
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1fc29424e6d0        composetest_web     "python app.py"          14 minutes ago      Up 14 minutes       0.0.0.0:5000->5000/tcp   composetest_web_1
+f20f5ec95f34        redis:alpine        "docker-entrypoint.s…"   14 minutes ago      Up 14 minutes       6379/tcp                 composetest_redis_1
+
+$ docker exec -it f20f5ec95f34 /bin/sh
+
+/data # redis-cli
+
+127.0.0.1:6379> GET hits
+"10"
+127.0.0.1:6379> quit
+```
+
+動作確認後は Docker Composer を停止しておきましょう．
+
+```sh
+$ docker-compose -f dockerfiles/composetest/docker-compose.yml stop
+Stopping composetest_web_1   ... done
+Stopping composetest_redis_1 ... done
+```
